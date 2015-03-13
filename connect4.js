@@ -1,5 +1,5 @@
 var fs = require("fs");
-var api_stuff = JSON.parse(fs.readFileSync("config.json", "utf8");
+var api_stuff = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
 var Twit = require("twit");
 var T = new Twit(
@@ -35,7 +35,6 @@ var tweet_id = 0;
 //number containing current move
 var current_move = 0;
 
-//tbh it's kind of annoying this isn't just built in
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
@@ -108,31 +107,41 @@ function draw_board()
 }
 
 //given a tweet, figure out what move the player is saying
-//returns a number 0-6, a usable aray index for column 1-7, or NaN on failure
-//for now just assume well-formed input, make this better once I'm done testing
+//returns a number 0-6, a usable aray index for column 1-7, or -1 on failure
+//I think this is failure-proof, simply rejects anything that isn't an int 1-7 (0-6 after the -1 in move's assignment)
+//anyway it's a lazy match that grabs the first int 1-7
 function move_extract(the_tweet)
 {
-	the_tweet = the_tweet.replace("@massconnect4 ","")
-	return the_tweet.match(/\d+/)[0] - 1;
+	the_tweet = the_tweet.replace("@massconnect4 ","");
+	return (the_tweet.match(/[1-7]+?/) || [0])[0] - 1;
 }
 
-//given an array of numbers, pick a winner and execute
+//given an array of objects of the form {user: "username", move: [0-6]}, pick a winner and execute
 //this will contain the logic for game modes later
 //random: random value
 //time: final value
 //vote: figure out the most popular
 //in future also must make sure move is valid
 //think abt whether to silently pick another, or forfeit turn, on bad move
-function do_move(the_moves, the_players)
+function do_move(the_tweets)
 {
 	//for now, there are no modes
 	//this is now 0-6
 	//BIGBIGBIGBIGUGUGUIGIUG : it tweets the newest rather than oldest move?
 	//MUCH BIGGER BUG: it crashes if there's no tweets
-	chosen_move = the_moves[the_moves.length-1];
-	player = the_players[the_players.length-1];
+	var chosen_move, player;
+
+	switch(game_type)
+	{
+		case "random":
+		case "speed":
+		case "vote":
+	}
+
+	chosen_move = the_tweets[the_tweets.length-1].move;
+	player = the_tweets[the_tweets.length-1].user;
 	if(wordfilter.blacklisted(player))
-		player = "******";
+		player = "********";
 
 	for(var j = 5; j > 0; j--)
 	{
@@ -177,27 +186,24 @@ function game_time()
 		//get 200 most recent statuses since last tweet
 		T.get("statuses/mentions_timeline", { count: 200, since_id: tweet_id }, function(err, data, response)
 		{
-			console.log("mention id: " + data[0].id);
-			console.log("data user sn: " + data[0].user.screen_name + "\ndata text: " + data[0].text);
-
-			//HELLO /!\ CHANGE THIS /!\
-			//make this an object instead of two random arrays
-			//I am too used to working around GML's bullshit and my bad habits have followed me to JS
-			var userlist = [];
-			var movelist = [];
-			for(var i = 0; i < data.length; i++)
+			if(typeof data !== undefined)
 			{
-				if(userlist.indexOf(data[i].user.screen_name) === -1)
+				//HELLO /!\ CHANGE THIS /!\
+				//make this an object instead of two random arrays
+				//I am too used to working around GML's bullshit and my bad habits have followed me to JS
+				var tweets = [];
+				for(var i = 0; i < data.length; i++)
 				{
-					userlist.push(data[i].user.screen_name);
-					movelist.push(move_extract(data[i].text));
+					if(tweets.filter(function(element) { if(element.user === data[i].user.screen_name) return true; else return false;}).length === 0)
+					{
+						tweets.push({ user: data[i].user.screen_name, move: move_extract(data[i].text)});
+						console.log("user: " + tweets[tweets.length-1].user + "\nmove: " + tweets[tweets.length-1].move);
+					}
 				}
+
+				if(tweets.length > 0)
+					do_move(tweets);
 			}
-
-			console.log("movelist: " + movelist + "\nuserlist: " + userlist);
-
-			if(movelist.length > 0)
-				do_move(movelist, userlist);
 		});
 	},120000);
 }
@@ -217,6 +223,9 @@ game_time();
  * removal from team can wait...
  *
  * maybe just implement vote mode and do the others later. vote mode is by far the most interesting, emphasizing teamwork.
+ *
+ * prolly in a different file that runs on a different sched but
+ * mb tweet leaderboards or whatever daily, def keep track of wins by team, goal is to encourage 
  *
  * I think that's it for now
  */
