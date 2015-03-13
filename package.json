@@ -1,0 +1,15 @@
+{
+  "name": "connect4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "connect4.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "alice-maz",
+  "license": "MIT",
+  "dependencies": {
+    "twit": "^1.1.20",
+    "wordfilter": "^0.1.9-1"
+  }
+}
