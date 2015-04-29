@@ -1,15 +1,23 @@
+//!\\ HOLY SHIT WIP //!\\
+//game_init() is gone
+//do_move() needs to be changed to work with tweeted_moves, vote logic set up, do its own safety checking mb
+//setInterval it on its own
+//game_time() is garbage pending deletion
+//add win logic and player win/participation stats
 var fs = require("fs");
-var api_stuff = JSON.parse(fs.readFileSync("config.json", "utf8"));
-
 var Twit = require("twit");
+var wordfilter = require("wordfilter");
+
+var api = JSON.parse(fs.readFileSync("config.json", "utf8"));
+
 var T = new Twit({
-	consumer_key: api_stuff.key,
-	consumer_secret: api_stuff.secret,
-	access_token: api_stuff.token,
-	access_token_secret: api_stuff.token_secret
+	consumer_key: api.key,
+	consumer_secret: api.secret,
+	access_token: api.token,
+	access_token_secret: api.token_secret
 });
 
-var wordfilter = require("wordfilter");
+var players = JSON.parse(fs.readFileSync("players.json", "utf8"));
 
 //some globals--this is the board, init to 0
 //ZERO ZERO IS THE TOP LEFT CORNER!!!!!
@@ -23,34 +31,80 @@ for(var i = 0; i < board_array.length; i++) {
 	}
 }
 
-//whose turn it is
-var to_play = "";
+//whose turn it is, initialize on random player
+var to_play = Math.floor(Math.random()*2) ? "sun" : "moon";
 //game type, "random", "speed", or "vote"
-var game_type = "";
+var game_type = "vote";
 //id of most recent bot tweet, as a cutoff for on-turn moves
 var tweet_id = "";
-//number containing current move
-var current_move = 0;
+//number containing current move, indexed from 1 for easier printing
+var current_move = 1;
+//object holding every move that has been tweeted in the current round
+var tweeted_moves = {};
+
+//!\\ ATTN
+//I have to write another js file that checks the tweet backlog and adds players to teams
+//Maybe daily, one script that adds players to teams and tweets the latest stats
+//so it should have a function that takes a tweet's text and checks
+//* if someone is trying to join a team
+//* if yes, if they're already on a team
+//* if no, add them to the team they want or random
+//--players.json--
+//{ alicemazzy: { team: moon, played: 5, wins: 3, joined: date }, markymark: { //etc } }
+//in future break stats down into "seasons"
+//--stats.json--
+//worry abt this later, call beta test period the "preseason"
+//--
+//then the daily script runs that function over all the past day's tweets
+//while the stream can run it over every tweet received
+var stream = T.stream("user");
+
+T.post("statuses/update", {
+	status: "Game Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
+	function(err, data, response) {
+		tweet_id = data.id_str;
+});
+
+stream.on("tweet", function(tweet) {
+	//exit immediately if not a mention
+	if((tweet.text).indexOf("@massconnect4") == -1) return;
+
+//	var words = (tweet.text).trim().toLowerCase().split(" ");
+	
+	//if they're on the player list
+	if(players.hasOwnProperty(tweet.user.screen_name)) {
+		//and current team
+		if(players[tweet.user.screen_name].team == to_play) {
+			//grab either a valid move or undefined
+			var their_move = move_extract(tweet);
+			//if there's a valid move, add/replace their slot in the moves object
+			if(their_move !== undefined) tweeted_moves[tweet.user.screen_name] = their_move;
+		}
+	}
+	//but if they're not on a team, maybe they want to join one
+	else try_add_player(tweet);
+});	
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-//game setup like first tweet, mode selection, stream opening, etc goes here
-function game_init() {
-	//choose random player to start
-	to_play = Math.floor(Math.random()*2) ? "sun" : "moon";
-	//replace with randomly chosen game type when I add more
-	game_type = "speed";
+function try_add_player(tweet) {
+	//init random so there's no bias if ppl tweet "sun moon" or whatever
+	var teams = Math.floor(Math.random() * 2) ? ["sun","moon"] : ["moon","sun"];
+	var words = (tweet.text).trim().toLowerCase().split(" ");
+	var will_join = "";
 
-	//tweet game start
-	T.post("statuses/update", {
-		status: "Game Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
-		function(err, data, response) {
-			tweet_id = data.id_str;
-	});
+	if(words.indexOf("random") > -1 || words.indexOf(teams[0]) > -1) will_join = teams[0];
+	else if(words.indexOf(teams[1]) > -1) will_join = teams[1];
+	else return;
 
-	current_move++;
+	//this check is done before calling
+	//if(players.hasOwnProperty(tweet.user.screen_name)) return;
+
+	//add them to the list and follow them
+	players[tweet.user.screen_name] = { team: will_join, played: 0, wins: 0, joined: new Date() };
+	T.post("friendships/create", {screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
 }
 
 //returns a string of newlined emoji repping the board plus column nums	
@@ -92,9 +146,12 @@ function draw_board() {
 //returns a number 0-6, a usable aray index for column 1-7, or -1 on failure
 //I think this is failure-proof, simply rejects anything that isn't an int 1-7 (0-6 after the -1 in move's assignment)
 //anyway it's a lazy match that grabs the first int 1-7
-function move_extract(the_tweet) {
-	the_tweet = the_tweet.replace("@massconnect4 ","");
-	return (the_tweet.match(/[1-7]+?/) || [0])[0] - 1;
+//!\\ ATTN
+//this used to return -1 on no match, not all calls to this have been fixed to account for this change
+function move_extract(tweet) {
+	tweet = tweet.replace("@massconnect4 ","");
+	match = tweet.match(/[1-7]+?/);
+	if(match) return match[0] - 1; else return undefined;
 }
 
 //given an array of objects of the form {user: "username", move: [0-6]}, pick a winner and execute
