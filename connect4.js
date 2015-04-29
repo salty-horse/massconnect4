@@ -31,8 +31,12 @@ for(var i = 0; i < board_array.length; i++) {
 	}
 }
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 //whose turn it is, initialize on random player
-var to_play = Math.floor(Math.random()*2) ? "sun" : "moon";
+var to_play = "moon"; //Math.floor(Math.random()*2) ? "sun" : "moon";
 //game type, "random", "speed", or "vote"
 var game_type = "vote";
 //id of most recent bot tweet, as a cutoff for on-turn moves
@@ -60,8 +64,9 @@ var tweeted_moves = {};
 var stream = T.stream("user");
 
 T.post("statuses/update", {
-	status: "Game Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
+	status: Math.floor(Math.random()*100) + " Test Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
 	function(err, data, response) {
+		if(err) throw err;
 		tweet_id = data.id_str;
 });
 
@@ -78,16 +83,14 @@ stream.on("tweet", function(tweet) {
 			//grab either a valid move or undefined
 			var their_move = move_extract(tweet);
 			//if there's a valid move, add/replace their slot in the moves object
-			if(their_move !== undefined) tweeted_moves[tweet.user.screen_name] = their_move;
+			if(their_move !== undefined && board_array[their_move][0] === 0) tweeted_moves[tweet.user.screen_name] = their_move;
 		}
 	}
 	//but if they're not on a team, maybe they want to join one
 	else try_add_player(tweet);
-});	
+});
 
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
+var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },60*1000);
 
 function try_add_player(tweet) {
 	//init random so there's no bias if ppl tweet "sun moon" or whatever
@@ -105,6 +108,9 @@ function try_add_player(tweet) {
 	//add them to the list and follow them
 	players[tweet.user.screen_name] = { team: will_join, played: 0, wins: 0, joined: new Date() };
 	T.post("friendships/create", {screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
+	fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+		if(err) throw err;
+	});
 }
 
 //returns a string of newlined emoji repping the board plus column nums	
@@ -142,6 +148,11 @@ function draw_board() {
 	return(board_img);
 }
 
+//I am so tired of team == "sun" ? "moon" : "sun" nonsense
+function flip() {
+	return to_play == "sun" ? "moon" : "sun";
+}
+
 //given a tweet, figure out what move the player is saying
 //returns a number 0-6, a usable aray index for column 1-7, or -1 on failure
 //I think this is failure-proof, simply rejects anything that isn't an int 1-7 (0-6 after the -1 in move's assignment)
@@ -149,55 +160,165 @@ function draw_board() {
 //!\\ ATTN
 //this used to return -1 on no match, not all calls to this have been fixed to account for this change
 function move_extract(tweet) {
-	tweet = tweet.replace("@massconnect4 ","");
+	tweet = (tweet.text).replace("@massconnect4 ","");
 	match = tweet.match(/[1-7]+?/);
 	if(match) return match[0] - 1; else return undefined;
 }
 
-//given an array of objects of the form {user: "username", move: [0-6]}, pick a winner and execute
+//updated to operate on tweeted_moves, obj of the form { alicemazzy:6, jilljo: 4, etc}
+//contains all validated, team-appropriate moves, wipe it when finished
 //this will contain the logic for game modes later
 //random: random value
 //time: final value
 //vote: figure out the most popular
 //in future also must make sure move is valid
 //think abt whether to silently pick another, or forfeit turn, on bad move
-function do_move(the_tweets) {
+function do_move() {
 	//for now, there are no modes
 	//this is now 0-6
 	//BIGBIGBIGBIGUGUGUIGIUG : it tweets the newest rather than oldest move?
 	//MUCH BIGGER BUG: it crashes if there's no tweets
-	var chosen_move, player;
 
+	console.log("DO_MOVE:\n" + JSON.stringify(tweeted_moves));
 	switch(game_type) {
 		case "random":
 		case "speed":
 		case "vote":
+			//counts up votes per column
+			var vote_counter = [0,0,0,0,0,0,0];
+			for(var key in tweeted_moves) vote_counter[tweeted_moves[key]]++;
+			//finds what the largest # of votes is
+			var most_votes = Math.max.apply(Math, vote_counter);
+			//collect all the indexes aka column numbers that hit that #
+//			var winning_moves = [];
+//			for(var i in vote_counter) if(vote_counter[i] == most_votes) winning_moves.push(i);
+			//!\\ fancy this up a bit later
+			//for now, if there's a tie Math.random settles it
+//			var final_move = winning_moves[Math.floor(Math.random() * winning_moves.length - 1)];
+			var final_move = parseInt(vote_counter.indexOf(Math.max.apply(Math, vote_counter)));
+//			console.log("vote_counter: " + JSON.stringify(vote_counter) +
+//				    "\nmost_votes: " + most_votes +
+//				    "\nwinning_moves: " + JSON.stringify(winning_moves) +
+//				    "\nfinal_move: " + final_move);
+			break;
 	}
 
-	chosen_move = the_tweets[the_tweets.length-1].move;
-	player = the_tweets[the_tweets.length-1].user;
-	if(wordfilter.blacklisted(player))
-		player = "********";
+//	if(wordfilter.blacklisted(player))
+//		player = "********";
 
 	for(var j = 5; j > 0; j--) {
-		if(board_array[chosen_move][j] === 0) {
+		if(board_array[final_move][j] === 0) {
 			//put a sun or moon in chosen column on lowest free row
-			board_array[chosen_move][j] = to_play;
-			to_play = to_play === "sun" ? "moon" : "sun";
-			break;
+			board_array[final_move][j] = to_play;
+			if(check_win(final_move, j)) {
+				win();
+			       	return;
+			} else break;
 		}
 	}
 
-	//we have now updated the board_array, turn, and current player
-	//in future, check for a win or draw now
 	T.post("statuses/update", {
-		status: "Move " + current_move + ": " + player + " Plays " + (chosen_move+1) + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
+		status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board() + "\n" + flip().capitalize() + "'s Turn"},
 		function(err, data, response) {
+			if(err) throw err;
 			tweet_id = data.id_str;
+			to_play = flip(); 
+			current_move++;
+			tweeted_moves = {};
 	});
-	current_move++;
 }
 
+//given the played position just check if it's part of a win
+//way simpler than checking the entire board
+function check_win(x, y) {
+	var sun_chain = 0;
+	var moon_chain = 0;
+
+	//column
+	for(var j = 0; j < 6; j++) {
+		if(board_array[x][j] == "sun") {
+			sun_chain++;
+			moon_chain = 0;
+		} else if(board_array[x][j] == "moon") {
+			moon_chain++;
+			sun_chain = 0;
+		} else {
+			moon_chain = 0;
+			sun_chain = 0;
+		}
+		if(moon_chain == 4) return "moon";
+		if(sun_chain == 4) return "sun";
+	}
+	
+	sun_chain = 0;
+	moon_chan = 0;
+
+	//row
+	for(var i = 0; i < 7; i++) {
+		if(board_array[i][y] == "sun") {
+			sun_chain++;
+			moon_chain = 0;
+		} else if(board_array[i][y] == "moon") {
+			moon_chain++;
+			sun_chain = 0;
+		} else {
+			moon_chain = 0;
+			sun_chain = 0;
+		}
+		if(moon_chain == 4) return "moon";
+		if(sun_chain == 4) return "sun";
+	}
+
+	sun_chain = 0;
+	moon_chan = 0;
+
+	//diag down
+	var n = x > y ? x - y : 0;
+	var m = y > x ? y - x : 0;
+	for(var i = n, j = m; i < 7 && j < 6; i++, j++) {
+		if(board_array[n][m] == "sun") {
+			sun_chain++;
+			moon_chain = 0;
+		} else if(board_array[n][m] == "moon") {
+			moon_chain++;
+			sun_chain = 0;
+		} else {
+			moon_chain = 0;
+			sun_chain = 0;
+		}
+		if(moon_chain == 4) return "moon";
+		if(sun_chain == 4) return "sun";
+	}
+
+	n = x > y ? x - y : 0;
+	m = y > x ? y + x : 5;
+	for(var i = n, j = m; i < 7 && j >= 0; i++, j--) {
+		if(board_array[n][m] == "sun") {
+			sun_chain++;
+			moon_chain = 0;
+		} else if(board_array[n][m] == "moon") {
+			moon_chain++;
+			sun_chain = 0;
+		} else {
+			moon_chain = 0;
+			sun_chain = 0;
+		}
+		if(moon_chain == 4) return "moon";
+		if(sun_chain == 4) return "sun";
+	}
+}
+
+function win() {
+	T.post("statuses/update", {
+		status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " Wins!!"},
+		function(err, data, response) {
+			if(err) throw err;
+			//clear interval, update stats, etc
+			clearInterval(interv);
+		});
+}	
+
+/*
 //main function where shit happens
 function game_time() {
 	//init, obv
