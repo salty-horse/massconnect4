@@ -8,7 +8,7 @@ var fs = require("fs");
 var Twit = require("twit");
 var wordfilter = require("wordfilter");
 
-var api = JSON.parse(fs.readFileSync("config.json", "utf8"));
+var api = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
 
 var T = new Twit({
 	consumer_key: api.key,
@@ -17,7 +17,7 @@ var T = new Twit({
 	access_token_secret: api.token_secret
 });
 
-var players = JSON.parse(fs.readFileSync("players.json", "utf8"));
+var players = JSON.parse(fs.readFileSync(__dirname + "/players.json", "utf8"));
 
 //some globals--this is the board, init to 0
 //ZERO ZERO IS THE TOP LEFT CORNER!!!!!
