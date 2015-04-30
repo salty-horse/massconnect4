@@ -33,8 +33,6 @@ String.prototype.capitalize = function() {
 var to_play = Math.floor(Math.random()*2) ? "sun" : "moon";
 //game type, "random", "speed", or "vote"
 var game_type = "vote";
-//id of most recent bot tweet, as a cutoff for on-turn moves
-var tweet_id = "";
 //number containing current move, indexed from 1 for easier printing
 var current_move = 1;
 //object holding every move that has been tweeted in the current round
@@ -61,7 +59,6 @@ T.post("statuses/update", {
 	status: Math.floor(Math.random()*100) + " Test Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
 	function(err, data, response) {
 		if(err) throw err;
-		tweet_id = data.id_str;
 });
 
 stream.on("tweet", function(tweet) {
@@ -216,7 +213,6 @@ function do_move() {
 				(+final_move+1) + "\n\n" + draw_board() + "\n" + flip().capitalize() + "'s Turn" },
 			function(err, data, response) {
 				if(err) throw err;
-				tweet_id = data.id_str;
 				to_play = flip(); 
 				current_move++;
 				tweeted_moves = {};
