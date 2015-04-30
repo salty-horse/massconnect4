@@ -1,9 +1,3 @@
-//!\\ HOLY SHIT WIP //!\\
-//game_init() is gone
-//do_move() needs to be changed to work with tweeted_moves, vote logic set up, do its own safety checking mb
-//setInterval it on its own
-//game_time() is garbage pending deletion
-//add win logic and player win/participation stats
 var fs = require("fs");
 var Twit = require("twit");
 var wordfilter = require("wordfilter");
@@ -157,8 +151,6 @@ function flip() {
 //returns a number 0-6, a usable aray index for column 1-7, or -1 on failure
 //I think this is failure-proof, simply rejects anything that isn't an int 1-7 (0-6 after the -1 in move's assignment)
 //anyway it's a lazy match that grabs the first int 1-7
-//!\\ ATTN
-//this used to return -1 on no match, not all calls to this have been fixed to account for this change
 function move_extract(tweet) {
 	tweet = (tweet.text).replace("@massconnect4 ","");
 	match = tweet.match(/[1-7]+?/);
@@ -171,14 +163,7 @@ function move_extract(tweet) {
 //random: random value
 //time: final value
 //vote: figure out the most popular
-//in future also must make sure move is valid
-//think abt whether to silently pick another, or forfeit turn, on bad move
 function do_move() {
-	//for now, there are no modes
-	//this is now 0-6
-	//BIGBIGBIGBIGUGUGUIGIUG : it tweets the newest rather than oldest move?
-	//MUCH BIGGER BUG: it crashes if there's no tweets
-
 	console.log("DO_MOVE:\n" + JSON.stringify(tweeted_moves));
 	switch(game_type) {
 		case "random":
@@ -276,57 +261,3 @@ function check_win(x, y) {
 
 	return false;
 }
-
-/*
-//main function where shit happens
-function game_time() {
-	//init, obv
-	game_init();
-
-	//this block runs every 2 minutes
-	setInterval(function() {
-		//get 200 most recent statuses since last tweet
-		T.get("statuses/mentions_timeline", { count: 200, since_id: tweet_id }, function(err, data, response) {
-			if(typeof data !== undefined) {
-				//this who function is garbage
-				//I should have a forEach, use obj of the form {alicemazzy:5, maliceazzy:2, ... etc }
-				//and just check if the entry exists rather than this filter nonsense
-				//HOWEVER
-				//game_time() itself needs to be totally revamped
-				//I want to use the streaming api, keep a buffer 
-				var tweets = [];
-				for(var i = 0; i < data.length; i++) {
-					if(tweets.filter(function(element) { if(element.user === data[i].user.screen_name) return true; else return false;}).length === 0) {
-						tweets.push({ user: data[i].user.screen_name, move: move_extract(data[i].text)});
-						console.log("user: " + tweets[tweets.length-1].user + "\nmove: " + tweets[tweets.length-1].move);
-					}
-				}
-
-				if(tweets.length > 0)
-					do_move(tweets);
-			}
-		});
-	},120000);
-}
-
-game_time();
-
-/* Anyway, todo...
- *
- * need to check for win condition obv, decided just scanning each row/col/diag is prolly fastest/easiet
- * checking for draw is harder... I guess I could just do like "assuming every unfilled spot was x/y player would they win?"
- * that is an incredibly naive way to check and games wouldn't draw until the board was nearly full... zzz.
- *
- * need to be able to handle no tweets, malformed tweets, etc. I like the idea of forfeiting a turn for a malformed tweet.
- * incentivizes being a proper player in a way that sweeping it under the rug doesn't. 
- *
- * need to split into teams and read/write team lists... prolly do this sooner rather than later, it affects the program flow a lot
- * removal from team can wait...
- *
- * maybe just implement vote mode and do the others later. vote mode is by far the most interesting, emphasizing teamwork.
- *
- * prolly in a different file that runs on a different sched but
- * mb tweet leaderboards or whatever daily, def keep track of wins by team, goal is to encourage 
- *
- * I think that's it for now
- */
