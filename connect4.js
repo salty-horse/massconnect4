@@ -36,7 +36,7 @@ String.prototype.capitalize = function() {
 }
 
 //whose turn it is, initialize on random player
-var to_play = "moon"; //Math.floor(Math.random()*2) ? "sun" : "moon";
+var to_play = Math.floor(Math.random()*2) ? "sun" : "moon";
 //game type, "random", "speed", or "vote"
 var game_type = "vote";
 //id of most recent bot tweet, as a cutoff for on-turn moves
@@ -90,7 +90,7 @@ stream.on("tweet", function(tweet) {
 	else try_add_player(tweet);
 });
 
-var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },60*1000);
+var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },60*1000/2);
 
 function try_add_player(tweet) {
 	//init random so there's no bias if ppl tweet "sun moon" or whatever
@@ -205,118 +205,77 @@ function do_move() {
 
 //	if(wordfilter.blacklisted(player))
 //		player = "********";
+	var final_j;
 
 	for(var j = 5; j > 0; j--) {
 		if(board_array[final_move][j] === 0) {
 			//put a sun or moon in chosen column on lowest free row
 			board_array[final_move][j] = to_play;
-			if(check_win(final_move, j)) {
-				win();
-			       	return;
-			} else break;
+			final_j = j;
+			break;
 		}
 	}
-
-	T.post("statuses/update", {
-		status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board() + "\n" + flip().capitalize() + "'s Turn"},
-		function(err, data, response) {
-			if(err) throw err;
-			tweet_id = data.id_str;
-			to_play = flip(); 
-			current_move++;
-			tweeted_moves = {};
-	});
+	if(check_win(final_move, final_j)) {
+		T.post("statuses/update", {
+			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " +
+				(+final_move+1) + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " Wins!!"},
+			function(err, data, response) {
+				if(err) throw err;
+				//clear interval, update stats, etc
+				clearInterval(interv);
+				stream.close();
+			});
+	} else {
+		T.post("statuses/update", {
+			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + 
+				(+final_move+1) + "\n\n" + draw_board() + "\n" + flip().capitalize() + "'s Turn" },
+			function(err, data, response) {
+				if(err) throw err;
+				tweet_id = data.id_str;
+				to_play = flip(); 
+				current_move++;
+				tweeted_moves = {};
+		});
+	}
 }
 
 //given the played position just check if it's part of a win
 //way simpler than checking the entire board
 function check_win(x, y) {
-	var sun_chain = 0;
-	var moon_chain = 0;
+	var this_player = board_array[x][y];
 
-	//column
-	for(var j = 0; j < 6; j++) {
-		if(board_array[x][j] == "sun") {
-			sun_chain++;
-			moon_chain = 0;
-		} else if(board_array[x][j] == "moon") {
-			moon_chain++;
-			sun_chain = 0;
-		} else {
-			moon_chain = 0;
-			sun_chain = 0;
-		}
-		if(moon_chain == 4) return "moon";
-		if(sun_chain == 4) return "sun";
+	//column, top->bottom
+	for(var j = 0, count = 0; j < 6; j++) {
+		if(board_array[x][j] == this_player) count++; else count = 0;
+		if(count == 4) return true;
 	}
-	
-	sun_chain = 0;
-	moon_chan = 0;
 
-	//row
+	//row, left->right
 	for(var i = 0; i < 7; i++) {
-		if(board_array[i][y] == "sun") {
-			sun_chain++;
-			moon_chain = 0;
-		} else if(board_array[i][y] == "moon") {
-			moon_chain++;
-			sun_chain = 0;
-		} else {
-			moon_chain = 0;
-			sun_chain = 0;
-		}
-		if(moon_chain == 4) return "moon";
-		if(sun_chain == 4) return "sun";
+		if(board_array[i][y] == this_player) count++; else count = 0;
+		if(count == 4) return true;
 	}
 
-	sun_chain = 0;
-	moon_chan = 0;
+	//diag down+right
+	var n = x, m = y;
+	while(n > 0 && m > 0) { n--; m--; }
 
-	//diag down
-	var n = x > y ? x - y : 0;
-	var m = y > x ? y - x : 0;
-	for(var i = n, j = m; i < 7 && j < 6; i++, j++) {
-		if(board_array[n][m] == "sun") {
-			sun_chain++;
-			moon_chain = 0;
-		} else if(board_array[n][m] == "moon") {
-			moon_chain++;
-			sun_chain = 0;
-		} else {
-			moon_chain = 0;
-			sun_chain = 0;
-		}
-		if(moon_chain == 4) return "moon";
-		if(sun_chain == 4) return "sun";
+	for(n, m; n < 7 && m < 6; n++, m++) {
+		if(board_array[n][m] == this_player) count++; else count = 0;
+		if(count == 4) return true;
 	}
 
-	n = x > y ? x - y : 0;
-	m = y > x ? y + x : 5;
-	for(var i = n, j = m; i < 7 && j >= 0; i++, j--) {
-		if(board_array[n][m] == "sun") {
-			sun_chain++;
-			moon_chain = 0;
-		} else if(board_array[n][m] == "moon") {
-			moon_chain++;
-			sun_chain = 0;
-		} else {
-			moon_chain = 0;
-			sun_chain = 0;
-		}
-		if(moon_chain == 4) return "moon";
-		if(sun_chain == 4) return "sun";
+	//diag down+left
+	n = x, m = y;
+	while(n < 6 && m > 0) { n++; m--; }
+
+	for(n, m; n > 0 && m < 6; n--, m++) {
+		if(board_array[n][m] == this_player) count++; else count = 0;
+		if(count == 4) return true;
 	}
+
+	return false;
 }
-
-function win() {
-	T.post("statuses/update", {
-		status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " Wins!!"},
-		function(err, data, response) {
-			if(err) throw err;
-			//clear interval, update stats, etc
-			clearInterval(interv);
-		});
-}	
 
 /*
 //main function where shit happens
