@@ -38,6 +38,10 @@ var game_type = "vote";
 var current_move = 1;
 //object holding every move that has been tweeted in the current round
 var tweeted_moves = {};
+//array holding a list of this game's participating players
+var participants = [];
+//array index for stat stuff, bc stats[stats.season] is possibly confusing
+var season = stats.season;
 
 //!\\ ATTN
 //I have to write another js file that checks the tweet backlog and adds players to teams
@@ -84,7 +88,7 @@ stream.on("tweet", function(tweet) {
 	else if(try_add_move(tweet) !== undefined) try_add_player(tweet, to_play);
 });
 
-var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },45*1000);
+var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },45*1000*2);
 
 //adds player to team and returns team name on success
 function try_add_player(tweet, team) {
@@ -102,8 +106,7 @@ function try_add_player(tweet, team) {
 	//if(players.hasOwnProperty(tweet.user.screen_name)) return;
 
 	//add them to the list and follow them
-	players[tweet.user.screen_name] = { team: will_join, played: 0, wins: 0, joined: new Date() };
-	players[tweet.user.screen_name] = { team: will_join, stats: [{win: 0, lose: 0, draw: 0}], joined: new Date() };
+	players[tweet.user.screen_name] = { team: will_join, stats: [{wins: 0, losses: 0, draws: 0, votes: 0}], joined: new Date() };
 	T.post("friendships/create", {screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
 	T.post("lists/members/create", {slug: will_join + "-team", owner_id: 3062270507, screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
 	fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) { if(err) throw err;});
@@ -172,6 +175,7 @@ function try_add_move(tweet) {
 	//be careful, 0 is a possible success (and failure is undefined), so checks on this must not coerce type
 	if(match && board_array[match[0]-1][0] === 0) {
 		tweeted_moves[tweet.user.screen_name] = match[0]-1;
+		T.post("favorites/create", { id: tweet.id_str }, function(err, data, response) { if(err) throw err; });
 		return match[0]-1;
 	}
 }
@@ -190,7 +194,12 @@ function do_move() {
 		case "vote":
 			//counts up votes per column
 			var vote_counter = [0,0,0,0,0,0,0];
-			for(var key in tweeted_moves) vote_counter[tweeted_moves[key]]++;
+			for(var key in tweeted_moves) {
+				vote_counter[tweeted_moves[key]]++;
+				if(participants.indexOf(key) == -1) participants.push(key);
+				players[key].stats[season].votes++;
+				stats[to_play][season].votes++;
+			}
 			//finds what the largest # of votes is
 //			var most_votes = Math.max.apply(Math, vote_counter);
 			//collect all the indexes aka column numbers that hit that #
@@ -226,6 +235,21 @@ function do_move() {
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
+				participants.forEach(function(element) {
+					players[element].team == to_play ?
+						players[element].stats[season].wins++ :
+						players[element].stats[season].losses++;
+				});
+				stats[to_play][season].wins++;
+				stats[flip()][season].losses++;
+
+				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+					if(err) throw err;
+				});
+				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats), "utf8", function(err) {
+					if(err) throw err;
+				});
+
 				clearInterval(interv);
 				stream.stop();
 			});
@@ -236,6 +260,19 @@ function do_move() {
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
+				participants.forEach(function(element) {
+					players[element].stats[season].draws++;
+				});
+				stats[to_play][season].draws++;
+				stats[flip()][season].draws++;
+
+				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+					if(err) throw err;
+				});
+				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats), "utf8", function(err) {
+					if(err) throw err;
+				});
+
 				clearInterval(interv);
 				stream.stop();
 			});
