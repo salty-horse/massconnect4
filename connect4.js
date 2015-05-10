@@ -12,6 +12,7 @@ var T = new Twit({
 });
 
 var players = JSON.parse(fs.readFileSync(__dirname + "/players.json", "utf8"));
+var stats = JSON.parse(fs.readFileSync(__dirname + "/stats.json", "utf8"));
 
 //some globals--this is the board, init to 0
 //ZERO ZERO IS THE TOP LEFT CORNER!!!!!
@@ -46,7 +47,7 @@ var tweeted_moves = {};
 //* if yes, if they're already on a team
 //* if no, add them to the team they want or random
 //--players.json--
-//{ alicemazzy: { team: moon, played: 5, wins: 3, joined: date }, markymark: { //etc } }
+//{ alicemazzy: { team: moon, stats: [{win: 3, lose: 2, draw: 1},{win: 5, lose: 2, draw: 3}], joined: date }, markymark: { //etc } }
 //in future break stats down into "seasons"
 //--stats.json--
 //worry abt this later, call beta test period the "preseason"
@@ -55,6 +56,8 @@ var tweeted_moves = {};
 //while the stream can run it over every tweet received
 var stream = T.stream("user");
 
+console.log("game_type: " + game_type + "\nto_play: " + to_play);
+//draw_board();
 T.post("statuses/update", {
 	status: Math.floor(Math.random()*100) + " Test Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
 	function(err, data, response) {
@@ -71,25 +74,27 @@ stream.on("tweet", function(tweet) {
 	if(players.hasOwnProperty(tweet.user.screen_name)) {
 		//and current team
 		if(players[tweet.user.screen_name].team == to_play) {
-			//grab either a valid move or undefined
-			var their_move = move_extract(tweet);
-			//if there's a valid move, add/replace their slot in the moves object
-			if(their_move !== undefined && board_array[their_move][0] === 0) tweeted_moves[tweet.user.screen_name] = their_move;
+			//try adding their move if they're making one
+			try_add_move(tweet);
 		}
 	}
 	//but if they're not on a team, maybe they want to join one
-	else try_add_player(tweet);
+	else if(try_add_player(tweet));
+	//but if they're just a rando trying to play without reading how it works, add them to the current team if they're tweeting a move
+	else if(try_add_move(tweet) !== undefined) try_add_player(tweet, to_play);
 });
 
-var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },60*1000/2);
+var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },45*1000);
 
-function try_add_player(tweet) {
+//adds player to team and returns team name on success
+function try_add_player(tweet, team) {
 	//init random so there's no bias if ppl tweet "sun moon" or whatever
 	var teams = Math.floor(Math.random() * 2) ? ["sun","moon"] : ["moon","sun"];
 	var words = (tweet.text).trim().toLowerCase().split(" ");
-	var will_join = "";
+	var will_join;
 
-	if(words.indexOf("random") > -1 || words.indexOf(teams[0]) > -1) will_join = teams[0];
+	if(team) will_join = team;
+	else if(words.indexOf("random") > -1 || words.indexOf(teams[0]) > -1) will_join = teams[0];
 	else if(words.indexOf(teams[1]) > -1) will_join = teams[1];
 	else return;
 
@@ -98,15 +103,18 @@ function try_add_player(tweet) {
 
 	//add them to the list and follow them
 	players[tweet.user.screen_name] = { team: will_join, played: 0, wins: 0, joined: new Date() };
+	players[tweet.user.screen_name] = { team: will_join, stats: [{win: 0, lose: 0, draw: 0}], joined: new Date() };
 	T.post("friendships/create", {screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
-	fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
-		if(err) throw err;
-	});
+	T.post("lists/members/create", {slug: will_join + "-team", owner_id: 3062270507, screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
+	fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) { if(err) throw err;});
+
+	return will_join;
 }
 
 //returns a string of newlined emoji repping the board plus column nums	
 function draw_board() {
 	var board_img = "";
+	var board_txt = "";
 
 	//sub w forEach later
 	for(var j = 0; j < 6; j++) {
@@ -115,27 +123,32 @@ function draw_board() {
 				case 0:
 					//blank
 					board_img += "\u2B1C";
+					board_txt += "O";
 					break;
 				case "sun":
 					//sun - 1f31e in normal unicode
 					board_img += "\uD83C\uDF1E";
+					board_txt += "S";
 					break;
 				case "moon":
 					//moon - 1f31a in normal unicode
 					board_img += "\uD83C\uDF1A";
+					board_txt += "M";
 					break;
 			}
 		}
 		//newline after each row
 		board_img += "\n";
+		board_txt += "\n";
 	}
 
 	//out of loops, we now have a string of emoji for the board
 	//just gotta add the column numbers...
 	board_img += "\u0031\u20E3\u0032\u20E3\u0033\u20E3\u0034\u20E3\u0035\u20E3\u0036\u20E3\u0037\u20E3\n";
+	board_txt += "1234567\n";
 
 	//aaand tada, we're done!
-	console.log(board_img);
+	console.log(board_txt);
 	return(board_img);
 }
 
@@ -144,14 +157,23 @@ function flip() {
 	return to_play == "sun" ? "moon" : "sun";
 }
 
-//given a tweet, figure out what move the player is saying
-//returns a number 0-6, a usable aray index for column 1-7, or -1 on failure
-//I think this is failure-proof, simply rejects anything that isn't an int 1-7 (0-6 after the -1 in move's assignment)
-//anyway it's a lazy match that grabs the first int 1-7
-function move_extract(tweet) {
-	tweet = (tweet.text).replace("@massconnect4 ","");
-	match = tweet.match(/[1-7]+?/);
-	if(match) return match[0] - 1; else return undefined;
+//given a tweet, figure out what move the player is saying, and adds to tweeted_moves if column is free
+//in other words, this assumes you already checked if the player is on the relevant team, but nothing more
+//idea: in the future I could easily add a "chaos" mode that takes moves from anyone
+//it would be *really* interesting if ppl played optimally on their team and poorly on the other
+function try_add_move(tweet) {
+	//otherwise everyone would play 4 lol
+//	tweet = (tweet.text).replace("@massconnect4 ","");
+	//first int 1-7 in the tweet
+	var match = tweet.text.replace("@massconnect4 ","").match(/[1-7]+?/);
+	//if there's a hit and the column is free, add the move to the list
+	//subtract 1 so other functions can use the tweeted moves as array indexes directly
+	//returns the move if a move was made, which other fns can use to check success/fail or other things
+	//be careful, 0 is a possible success (and failure is undefined), so checks on this must not coerce type
+	if(match && board_array[match[0]-1][0] === 0) {
+		tweeted_moves[tweet.user.screen_name] = match[0]-1;
+		return match[0]-1;
+	}
 }
 
 //updated to operate on tweeted_moves, obj of the form { alicemazzy:6, jilljo: 4, etc}
@@ -170,7 +192,7 @@ function do_move() {
 			var vote_counter = [0,0,0,0,0,0,0];
 			for(var key in tweeted_moves) vote_counter[tweeted_moves[key]]++;
 			//finds what the largest # of votes is
-			var most_votes = Math.max.apply(Math, vote_counter);
+//			var most_votes = Math.max.apply(Math, vote_counter);
 			//collect all the indexes aka column numbers that hit that #
 //			var winning_moves = [];
 //			for(var i in vote_counter) if(vote_counter[i] == most_votes) winning_moves.push(i);
@@ -205,7 +227,17 @@ function do_move() {
 				if(err) throw err;
 				//clear interval, update stats, etc
 				clearInterval(interv);
-				stream.close();
+				stream.stop();
+			});
+	} else if(check_draw()) {
+		T.post("statuses/update", {
+			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " +
+				(+final_move+1) + "\n\n" + draw_board() + "\nDraw Game."},
+			function(err, data, response) {
+				if(err) throw err;
+				//clear interval, update stats, etc
+				clearInterval(interv);
+				stream.stop();
 			});
 	} else {
 		T.post("statuses/update", {
@@ -256,4 +288,13 @@ function check_win(x, y) {
 	}
 
 	return false;
+}
+
+//come up with a better implementation later
+//currently this doesn't draw until the board is full
+//a better function would check if a win is impossible on a non-full board
+//possibly "if all empty spaces were filled by either team would neither win"
+//an even better function would be able to take into account the fact that each team *must* play and be able to determine draw even earlier
+function check_draw() {
+	return (board_array.reduce(function(a,b){return a.concat(b);}).indexOf(0) == -1);
 }

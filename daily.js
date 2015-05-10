@@ -41,4 +41,5 @@ function try_add_player(tweet) {
 	//they are not. add them to the list and follow them
 	players[tweet.user.screen_name] = { team: will_join, played: 0, wins: 0, joined: new Date() };
 	T.post("friendships/create", {screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
+	T.post("lists/members/create", {slug: will_join + "-team", owner_id: 3062270507, screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
 }
