@@ -42,6 +42,8 @@ var tweeted_moves = {};
 var participants = [];
 //array index for stat stuff, bc stats[stats.season] is possibly confusing
 var season = stats.season;
+//increment on interval with no votes, clear on do_move, kill game after x minutes of no plays
+var timeout = 0;
 
 //!\\ ATTN
 //I have to write another js file that checks the tweet backlog and adds players to teams
@@ -61,18 +63,16 @@ var season = stats.season;
 var stream = T.stream("user");
 
 console.log("game_type: " + game_type + "\nto_play: " + to_play);
-//draw_board();
 T.post("statuses/update", {
-	status: Math.floor(Math.random()*100) + " Test Start\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
+	status: "Preseason Game "+(+stats.games+1)+"\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
 	function(err, data, response) {
 		if(err) throw err;
 });
 
 stream.on("tweet", function(tweet) {
 	//exit immediately if not a mention
-	if((tweet.text).indexOf("@massconnect4") == -1) return;
-
-//	var words = (tweet.text).trim().toLowerCase().split(" ");
+	//the magic number 14 is to allow `.@`, the slice itself is a simple way to disallow RTs
+	if(tweet.text.slice(0,14).indexOf("@massconnect4") == -1) return;
 	
 	//if they're on the player list
 	if(players.hasOwnProperty(tweet.user.screen_name)) {
@@ -88,7 +88,33 @@ stream.on("tweet", function(tweet) {
 	else if(try_add_move(tweet) !== undefined) try_add_player(tweet, to_play);
 });
 
-var interv = setInterval(function() { if(Object.getOwnPropertyNames(tweeted_moves).length > 0) do_move(); },45*1000*2);
+//un-hardcode the time values later imo
+var interv = setInterval(function() {
+	if(Object.getOwnPropertyNames(tweeted_moves).length > 0) {
+		timeout = 0;
+		do_move();
+	} else timeout+=1.5;
+	if(timeout >= 15) {
+		T.post("statuses/update", {
+			status: "No votes received for "+timeout+" minutes\n\n" + draw_board() + "\nPreseason Game "+(+stats.games+1)+": Null Game"},
+			function(err, data, response) {
+				if(err) throw err;
+				//clear interval, update stats, etc
+				stats.games++;
+				stats.dead_games++;
+
+				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+					if(err) throw err;
+				});
+				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats), "utf8", function(err) {
+					if(err) throw err;
+				});
+
+				clearInterval(interv);
+				stream.stop();
+		});
+	}
+},90*1000);
 
 //adds player to team and returns team name on success
 function try_add_player(tweet, team) {
@@ -193,6 +219,13 @@ function do_move() {
 		case "speed":
 		case "vote":
 			//counts up votes per column
+			//!\\ preseason who cares but tweak this later
+			//first this method sucks and picks the leftmost column on tie, fix
+			//second I want to hold votes in escrow and only add after the game is done, dead games shouldn't count
+			//third do fancier thngs, like track if X player voted for the move that was chosen
+			//give awards to players mb per-game, per-week, per-season... ideas:
+			//MVP might be "player on the winning team who most often voted for the move that was chosen"
+			//can also give awards for most games played, most avg votes per game, most wins, best win %, etc
 			var vote_counter = [0,0,0,0,0,0,0];
 			for(var key in tweeted_moves) {
 				vote_counter[tweeted_moves[key]]++;
@@ -230,8 +263,8 @@ function do_move() {
 	}
 	if(check_win(final_move, final_j)) {
 		T.post("statuses/update", {
-			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " +
-				(+final_move+1) + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " Wins!!"},
+			status: "Move "+current_move+": "+to_play.capitalize()+" Plays "+
+				(+final_move+1)+"\n\n"+draw_board()+"\nPreseason Game "+(+stats.games+1)+": "+to_play.capitalize()+" Wins!!"},
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -242,6 +275,7 @@ function do_move() {
 				});
 				stats[to_play][season].wins++;
 				stats[flip()][season].losses++;
+				stats.games++;
 
 				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
 					if(err) throw err;
@@ -256,7 +290,7 @@ function do_move() {
 	} else if(check_draw()) {
 		T.post("statuses/update", {
 			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " +
-				(+final_move+1) + "\n\n" + draw_board() + "\nDraw Game."},
+				(+final_move+1) + "\n\n" + draw_board() + "\nPreseason Game "+(+stats.games+1)+": Draw Game"},
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -265,6 +299,7 @@ function do_move() {
 				});
 				stats[to_play][season].draws++;
 				stats[flip()][season].draws++;
+				stats.games++;
 
 				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
 					if(err) throw err;
