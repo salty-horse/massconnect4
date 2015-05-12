@@ -93,8 +93,12 @@ var interv = setInterval(function() {
 	if(Object.getOwnPropertyNames(tweeted_moves).length > 0) {
 		timeout = 0;
 		do_move();
-	} else timeout+=1.5;
-	if(timeout >= 15) {
+	} else timeout+=2;
+	if(timeout == 16) {
+		T.post("statuses/update", {
+			status: "No votes received for "+timeout+" minutes\n\n" + draw_board() + "\nPlease recruit additional players for "+to_play.capitalize()+" Team"}, function(err, data, response) { if(err) throw err; });
+	}
+	if(timeout >= 20) {
 		T.post("statuses/update", {
 			status: "No votes received for "+timeout+" minutes\n\n" + draw_board() + "\nPreseason Game "+(+stats.games+1)+": Null Game"},
 			function(err, data, response) {
