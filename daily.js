@@ -10,7 +10,7 @@ var T = new Twit({
 	access_token_secret: api.token_secret
 });
 
-var players = JSON.parse(fs.readFileSync("players.json", "utf8"));
+var players = JSON.parse(fs.readFileSync(__dirname + "/players.json", "utf8"));
 T.get("statuses/user_timeline", { user_id: 3062270507, count: 5 }, function(err, data, response) {
 	if(err) throw err;
 	T.get("statuses/mentions_timeline", { count: 200, since_id: data[0].id_str }, function(err, data, response) {
