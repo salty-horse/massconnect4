@@ -338,12 +338,14 @@ function check_win(x, y) {
 		if(board_array[x][j] == this_player) count++; else count = 0;
 		if(count == 4) return true;
 	}
+	count=0;
 
 	//row, left->right
 	for(var i = 0; i < 7; i++) {
 		if(board_array[i][y] == this_player) count++; else count = 0;
 		if(count == 4) return true;
 	}
+	count=0;
 
 	//diag down+right
 	var n = x, m = y;
@@ -353,6 +355,7 @@ function check_win(x, y) {
 		if(board_array[n][m] == this_player) count++; else count = 0;
 		if(count == 4) return true;
 	}
+	count=0;
 
 	//diag down+left
 	n = x, m = y;
