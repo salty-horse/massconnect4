@@ -96,7 +96,7 @@ var interv = setInterval(function() {
 	} else timeout+=2;
 	if(timeout == 16) {
 		T.post("statuses/update", {
-			status: "No votes received for "+timeout+" minutes\n\n" + draw_board() + "\nPlease recruit additional players for "+to_play.capitalize()+" Team"}, function(err, data, response) { if(err) throw err; });
+			status: "No votes received for 15 minutes\n\n" + draw_board() + "\nGame will end unless players join"}, function(err, data, response) { if(err) throw err; });
 	}
 	if(timeout >= 20) {
 		T.post("statuses/update", {
@@ -118,7 +118,7 @@ var interv = setInterval(function() {
 				stream.stop();
 		});
 	}
-},90*1000);
+},60*1000*2);
 
 //adds player to team and returns team name on success
 function try_add_player(tweet, team) {
