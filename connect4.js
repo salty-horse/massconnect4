@@ -257,7 +257,7 @@ function do_move() {
 //		player = "********";
 	var final_j;
 
-	for(var j = 5; j > 0; j--) {
+	for(var j = 5; j >= 0; j--) {
 		if(board_array[final_move][j] === 0) {
 			//put a sun or moon in chosen column on lowest free row
 			board_array[final_move][j] = to_play;
