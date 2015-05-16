@@ -1,1 +1,398 @@
-{"alicemazzy":{"team":"moon","stats":[{"wins":3,"losses":1,"draws":0,"votes":30}],"joined":"2015-04-29T13:46:26.397Z"},"muffinista":{"team":"moon","stats":[{"wins":4,"losses":2,"draws":0,"votes":33}],"joined":"2015-04-29T13:54:11.061Z"},"ragzouken":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-04-29T21:21:44.451Z"},"h0ke":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-04-30T21:28:39.658Z"},"sanspoint":{"team":"sun","stats":[{"wins":3,"losses":5,"draws":0,"votes":59}],"joined":"2015-05-07T12:54:11.078Z"},"saltyhorse":{"team":"moon","stats":[{"wins":4,"losses":1,"draws":0,"votes":31}],"joined":"2015-05-07T13:07:52.982Z"},"IAmAboutUs":{"team":"sun","stats":[{"wins":2,"losses":5,"draws":0,"votes":38}],"joined":"2015-05-07T13:12:13.850Z"},"aNuChallenger":{"team":"moon","stats":[{"wins":2,"losses":1,"draws":0,"votes":5}],"joined":"2015-05-07T13:12:50.989Z"},"blixt":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-07T13:13:40.758Z"},"nynexrepublic":{"team":"moon","stats":[{"wins":2,"losses":1,"draws":0,"votes":10}],"joined":"2015-05-07T13:14:39.622Z"},"v21":{"team":"moon","stats":[{"wins":1,"losses":0,"draws":0,"votes":1}],"joined":"2015-05-10T02:57:39.601Z"},"sjalexander":{"team":"sun","stats":[{"wins":0,"losses":3,"draws":0,"votes":3}],"joined":"2015-05-10T07:07:46.827Z"},"botmistress":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-10T09:38:47.444Z"},"tinysubversions":{"team":"moon","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-10T12:48:53.391Z"},"TheMagdain":{"team":"moon","stats":[{"wins":2,"losses":0,"draws":0,"votes":8}],"joined":"2015-05-10T13:01:50.675Z"},"tullyhansen":{"team":"sun","stats":[{"wins":1,"losses":0,"draws":0,"votes":1}],"joined":"2015-05-10T13:01:50.685Z"},"inky":{"team":"moon","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-10T13:05:25.944Z"},"adtidixon":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-10T13:08:26.837Z"},"ksheely":{"team":"sun","stats":[{"wins":0,"losses":1,"draws":0,"votes":3}],"joined":"2015-05-10T22:18:13.938Z"},"call_me_lich":{"team":"moon","stats":[{"wins":3,"losses":0,"draws":0,"votes":7}],"joined":"2015-05-11T16:08:24.571Z"},"elliot_bentley":{"team":"moon","stats":[{"wins":1,"losses":0,"draws":0,"votes":3}],"joined":"2015-05-11T16:52:04.678Z"},"_hartsick":{"team":"moon","stats":[{"wins":3,"losses":2,"draws":0,"votes":14}],"joined":"2015-05-12T05:20:42.709Z"},"Silasary":{"team":"sun","stats":[{"wins":0,"losses":1,"draws":0,"votes":1}],"joined":"2015-05-14T00:01:03.465Z"},"Piratonym":{"team":"moon","stats":[{"wins":0,"losses":1,"draws":0,"votes":1}],"joined":"2015-05-14T00:19:38.918Z"},"raiganburns":{"team":"sun","stats":[{"wins":1,"losses":0,"draws":0,"votes":1}],"joined":"2015-05-14T16:56:17.232Z"},"netsef":{"team":"moon","stats":[{"wins":0,"losses":1,"draws":0,"votes":1}],"joined":"2015-05-14T16:56:38.946Z"},"gdead":{"team":"moon","stats":[{"wins":0,"losses":1,"draws":0,"votes":1}],"joined":"2015-05-15T00:08:40.151Z"},"smoochbot":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-15T16:19:25.778Z"},"wohanley":{"team":"moon","stats":[{"wins":1,"losses":0,"draws":0,"votes":13}],"joined":"2015-05-16T00:01:03.774Z"},"tswift_tunes":{"team":"moon","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-16T00:01:03.801Z"},"swayandsea":{"team":"sun","stats":[{"wins":0,"losses":1,"draws":0,"votes":1}],"joined":"2015-05-16T00:01:03.825Z"},"HilariousCow":{"team":"sun","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-16T00:02:37.019Z"},"kittyhorrorshow":{"team":"moon","stats":[{"wins":0,"losses":0,"draws":0,"votes":0}],"joined":"2015-05-16T07:58:08.919Z"}}
+{
+	"alicemazzy": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 3,
+				"losses": 1,
+				"draws": 0,
+				"votes": 30
+			}
+		],
+		"joined": "2015-04-29T13:46:26.397Z"
+	},
+	"muffinista": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 4,
+				"losses": 2,
+				"draws": 0,
+				"votes": 33
+			}
+		],
+		"joined": "2015-04-29T13:54:11.061Z"
+	},
+	"ragzouken": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-04-29T21:21:44.451Z"
+	},
+	"h0ke": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-04-30T21:28:39.658Z"
+	},
+	"sanspoint": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 3,
+				"losses": 5,
+				"draws": 0,
+				"votes": 59
+			}
+		],
+		"joined": "2015-05-07T12:54:11.078Z"
+	},
+	"saltyhorse": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 4,
+				"losses": 1,
+				"draws": 0,
+				"votes": 31
+			}
+		],
+		"joined": "2015-05-07T13:07:52.982Z"
+	},
+	"IAmAboutUs": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 2,
+				"losses": 5,
+				"draws": 0,
+				"votes": 38
+			}
+		],
+		"joined": "2015-05-07T13:12:13.850Z"
+	},
+	"aNuChallenger": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 2,
+				"losses": 1,
+				"draws": 0,
+				"votes": 5
+			}
+		],
+		"joined": "2015-05-07T13:12:50.989Z"
+	},
+	"blixt": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-07T13:13:40.758Z"
+	},
+	"nynexrepublic": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 2,
+				"losses": 1,
+				"draws": 0,
+				"votes": 10
+			}
+		],
+		"joined": "2015-05-07T13:14:39.622Z"
+	},
+	"v21": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 1,
+				"losses": 0,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-10T02:57:39.601Z"
+	},
+	"sjalexander": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 3,
+				"draws": 0,
+				"votes": 3
+			}
+		],
+		"joined": "2015-05-10T07:07:46.827Z"
+	},
+	"botmistress": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-10T09:38:47.444Z"
+	},
+	"tinysubversions": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-10T12:48:53.391Z"
+	},
+	"TheMagdain": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 2,
+				"losses": 0,
+				"draws": 0,
+				"votes": 8
+			}
+		],
+		"joined": "2015-05-10T13:01:50.675Z"
+	},
+	"tullyhansen": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 1,
+				"losses": 0,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-10T13:01:50.685Z"
+	},
+	"inky": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-10T13:05:25.944Z"
+	},
+	"adtidixon": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-10T13:08:26.837Z"
+	},
+	"ksheely": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 1,
+				"draws": 0,
+				"votes": 3
+			}
+		],
+		"joined": "2015-05-10T22:18:13.938Z"
+	},
+	"call_me_lich": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 3,
+				"losses": 0,
+				"draws": 0,
+				"votes": 7
+			}
+		],
+		"joined": "2015-05-11T16:08:24.571Z"
+	},
+	"elliot_bentley": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 1,
+				"losses": 0,
+				"draws": 0,
+				"votes": 3
+			}
+		],
+		"joined": "2015-05-11T16:52:04.678Z"
+	},
+	"_hartsick": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 3,
+				"losses": 2,
+				"draws": 0,
+				"votes": 14
+			}
+		],
+		"joined": "2015-05-12T05:20:42.709Z"
+	},
+	"Silasary": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 1,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-14T00:01:03.465Z"
+	},
+	"Piratonym": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 1,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-14T00:19:38.918Z"
+	},
+	"raiganburns": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 1,
+				"losses": 0,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-14T16:56:17.232Z"
+	},
+	"netsef": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 1,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-14T16:56:38.946Z"
+	},
+	"gdead": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 1,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-15T00:08:40.151Z"
+	},
+	"smoochbot": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-15T16:19:25.778Z"
+	},
+	"wohanley": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 1,
+				"losses": 0,
+				"draws": 0,
+				"votes": 13
+			}
+		],
+		"joined": "2015-05-16T00:01:03.774Z"
+	},
+	"tswift_tunes": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-16T00:01:03.801Z"
+	},
+	"swayandsea": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 1,
+				"draws": 0,
+				"votes": 1
+			}
+		],
+		"joined": "2015-05-16T00:01:03.825Z"
+	},
+	"HilariousCow": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-16T00:02:37.019Z"
+	},
+	"kittyhorrorshow": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-16T07:58:08.919Z"
+	}
+}

@@ -108,10 +108,10 @@ var interv = setInterval(function() {
 				stats.games++;
 				stats.dead_games++;
 
-				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+				fs.writeFile(__dirname + "/players.json", JSON.stringify(players,null,"\t"), "utf8", function(err) {
 					if(err) throw err;
 				});
-				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats), "utf8", function(err) {
+				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats,null,"\t"), "utf8", function(err) {
 					if(err) throw err;
 				});
 
@@ -140,7 +140,7 @@ function try_add_player(tweet, team) {
 	players[tweet.user.screen_name] = { team: will_join, stats: [{wins: 0, losses: 0, draws: 0, votes: 0}], joined: new Date() };
 	T.post("friendships/create", {screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
 	T.post("lists/members/create", {slug: will_join + "-team", owner_id: 3062270507, screen_name: tweet.user.screen_name}, function(err) { if(err) throw err; });
-	fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) { if(err) throw err;});
+	fs.writeFile(__dirname + "/players.json", JSON.stringify(players,null,"\t"), "utf8", function(err) { if(err) throw err;});
 
 	return will_join;
 }
@@ -267,10 +267,10 @@ function do_move() {
 				stats[flip()][season].losses++;
 				stats.games++;
 
-				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+				fs.writeFile(__dirname + "/players.json", JSON.stringify(players,null,"\t"), "utf8", function(err) {
 					if(err) throw err;
 				});
-				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats), "utf8", function(err) {
+				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats,null,"\t"), "utf8", function(err) {
 					if(err) throw err;
 				});
 
@@ -291,10 +291,10 @@ function do_move() {
 				stats[flip()][season].draws++;
 				stats.games++;
 
-				fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+				fs.writeFile(__dirname + "/players.json", JSON.stringify(players,null,"\t"), "utf8", function(err) {
 					if(err) throw err;
 				});
-				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats), "utf8", function(err) {
+				fs.writeFile(__dirname + "/stats.json", JSON.stringify(stats,null,"\t"), "utf8", function(err) {
 					if(err) throw err;
 				});
 

@@ -17,7 +17,7 @@ T.get("statuses/user_timeline", { user_id: 3062270507, count: 5 }, function(err,
 		if(err) throw err;
 		if(data) data.forEach(function(element) { try_add_player(element); });
 
-		fs.writeFile(__dirname + "/players.json", JSON.stringify(players), "utf8", function(err) {
+		fs.writeFile(__dirname + "/players.json", JSON.stringify(players,null,"\t"), "utf8", function(err) {
 			if(err) throw err;
 		});
 
