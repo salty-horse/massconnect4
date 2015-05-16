@@ -195,10 +195,7 @@ function flip() {
 //idea: in the future I could easily add a "chaos" mode that takes moves from anyone
 //it would be *really* interesting if ppl played optimally on their team and poorly on the other
 function try_add_move(tweet) {
-	//otherwise everyone would play 4 lol
-//	tweet = (tweet.text).replace("@massconnect4 ","");
-	//first int 1-7 in the tweet
-	var match = tweet.text.replace("@massconnect4 ","").match(/[1-7]+?/);
+	var match = tweet.text.replace(/@[A-Za-z0-9]*/g,"").match(/[1-7]/);
 	//if there's a hit and the column is free, add the move to the list
 	//subtract 1 so other functions can use the tweeted moves as array indexes directly
 	//returns the move if a move was made, which other fns can use to check success/fail or other things
