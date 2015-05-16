@@ -1,6 +1,7 @@
 var fs = require("fs");
 var Twit = require("twit");
 var wordfilter = require("wordfilter");
+var _ = require("underscore");
 
 var api = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
 
@@ -221,32 +222,20 @@ function do_move() {
 		case "vote":
 			//counts up votes per column
 			//!\\ preseason who cares but tweak this later
-			//first this method sucks and picks the leftmost column on tie, fix
-			//second I want to hold votes in escrow and only add after the game is done, dead games shouldn't count
-			//third do fancier thngs, like track if X player voted for the move that was chosen
+			//I want to hold votes in escrow and only add after the game is done, dead games shouldn't count
+			//also do fancier thngs, like track if X player voted for the move that was chosen
 			//give awards to players mb per-game, per-week, per-season... ideas:
 			//MVP might be "player on the winning team who most often voted for the move that was chosen"
 			//can also give awards for most games played, most avg votes per game, most wins, best win %, etc
-			var vote_counter = [0,0,0,0,0,0,0];
 			for(var key in tweeted_moves) {
-				vote_counter[tweeted_moves[key]]++;
+				//in theory this is extraneous, participants and team votes can derive from a hashmap of all previous tweeted_moves objects
+				//I can use immutable for that, also for board array to allow full match history
 				if(participants.indexOf(key) == -1) participants.push(key);
 				players[key].stats[season].votes++;
 				stats[to_play][season].votes++;
 			}
-			//finds what the largest # of votes is
-//			var most_votes = Math.max.apply(Math, vote_counter);
-			//collect all the indexes aka column numbers that hit that #
-//			var winning_moves = [];
-//			for(var i in vote_counter) if(vote_counter[i] == most_votes) winning_moves.push(i);
-			//!\\ fancy this up a bit later
-			//for now, if there's a tie Math.random settles it
-//			var final_move = winning_moves[Math.floor(Math.random() * winning_moves.length - 1)];
-			var final_move = parseInt(vote_counter.indexOf(Math.max.apply(Math, vote_counter)));
-//			console.log("vote_counter: " + JSON.stringify(vote_counter) +
-//				    "\nmost_votes: " + most_votes +
-//				    "\nwinning_moves: " + JSON.stringify(winning_moves) +
-//				    "\nfinal_move: " + final_move);
+
+			var final_move = _.chain(tweeted_moves).countBy().pairs().shuffle().max(_.last).head().value();
 			break;
 	}
 
