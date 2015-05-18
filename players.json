@@ -3,10 +3,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 3,
+				"wins": 6,
 				"losses": 1,
 				"draws": 0,
-				"votes": 30
+				"votes": 62
 			}
 		],
 		"joined": "2015-04-29T13:46:26.397Z"
@@ -15,10 +15,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 4,
+				"wins": 6,
 				"losses": 2,
 				"draws": 0,
-				"votes": 33
+				"votes": 38
 			}
 		],
 		"joined": "2015-04-29T13:54:11.061Z"
@@ -30,7 +30,7 @@
 				"wins": 0,
 				"losses": 0,
 				"draws": 0,
-				"votes": 0
+				"votes": 1
 			}
 		],
 		"joined": "2015-04-29T21:21:44.451Z"
@@ -40,9 +40,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 0,
+				"losses": 2,
 				"draws": 0,
-				"votes": 0
+				"votes": 2
 			}
 		],
 		"joined": "2015-04-30T21:28:39.658Z"
@@ -52,9 +52,9 @@
 		"stats": [
 			{
 				"wins": 3,
-				"losses": 5,
+				"losses": 8,
 				"draws": 0,
-				"votes": 59
+				"votes": 75
 			}
 		],
 		"joined": "2015-05-07T12:54:11.078Z"
@@ -63,10 +63,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 4,
+				"wins": 5,
 				"losses": 1,
 				"draws": 0,
-				"votes": 31
+				"votes": 43
 			}
 		],
 		"joined": "2015-05-07T13:07:52.982Z"
@@ -76,9 +76,9 @@
 		"stats": [
 			{
 				"wins": 2,
-				"losses": 5,
+				"losses": 6,
 				"draws": 0,
-				"votes": 38
+				"votes": 39
 			}
 		],
 		"joined": "2015-05-07T13:12:13.850Z"
@@ -87,10 +87,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 2,
+				"wins": 3,
 				"losses": 1,
 				"draws": 0,
-				"votes": 5
+				"votes": 7
 			}
 		],
 		"joined": "2015-05-07T13:12:50.989Z"
@@ -171,10 +171,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 2,
+				"wins": 4,
 				"losses": 0,
 				"draws": 0,
-				"votes": 8
+				"votes": 16
 			}
 		],
 		"joined": "2015-05-10T13:01:50.675Z"
@@ -195,10 +195,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 0,
+				"wins": 2,
 				"losses": 0,
 				"draws": 0,
-				"votes": 0
+				"votes": 9
 			}
 		],
 		"joined": "2015-05-10T13:05:25.944Z"
@@ -220,9 +220,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 1,
+				"losses": 2,
 				"draws": 0,
-				"votes": 3
+				"votes": 6
 			}
 		],
 		"joined": "2015-05-10T22:18:13.938Z"
@@ -255,10 +255,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 3,
+				"wins": 4,
 				"losses": 2,
 				"draws": 0,
-				"votes": 14
+				"votes": 15
 			}
 		],
 		"joined": "2015-05-12T05:20:42.709Z"
@@ -339,10 +339,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 1,
+				"wins": 3,
 				"losses": 0,
 				"draws": 0,
-				"votes": 13
+				"votes": 15
 			}
 		],
 		"joined": "2015-05-16T00:01:03.774Z"
@@ -364,9 +364,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 1,
+				"losses": 4,
 				"draws": 0,
-				"votes": 1
+				"votes": 23
 			}
 		],
 		"joined": "2015-05-16T00:01:03.825Z"
@@ -376,14 +376,26 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 0,
+				"losses": 1,
 				"draws": 0,
-				"votes": 0
+				"votes": 5
 			}
 		],
 		"joined": "2015-05-16T00:02:37.019Z"
 	},
 	"kittyhorrorshow": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 2,
+				"losses": 0,
+				"draws": 0,
+				"votes": 3
+			}
+		],
+		"joined": "2015-05-16T07:58:08.919Z"
+	},
+	"BrendenGibbons": {
 		"team": "moon",
 		"stats": [
 			{
@@ -393,6 +405,90 @@
 				"votes": 0
 			}
 		],
-		"joined": "2015-05-16T07:58:08.919Z"
+		"joined": "2015-05-16T16:39:50.068Z"
+	},
+	"ceMelusine": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 2,
+				"losses": 0,
+				"draws": 0,
+				"votes": 2
+			}
+		],
+		"joined": "2015-05-16T17:37:03.953Z"
+	},
+	"DevourerOfTime": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-16T23:22:36.353Z"
+	},
+	"GamingFTL": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 2,
+				"draws": 0,
+				"votes": 8
+			}
+		],
+		"joined": "2015-05-17T00:17:58.750Z"
+	},
+	"exmachina64": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-18T01:10:41.411Z"
+	},
+	"thomasABoyt": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-18T01:10:41.439Z"
+	},
+	"akatookey": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-18T01:10:41.460Z"
+	},
+	"lazerwalker": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-18T01:10:41.482Z"
 	}
 }
