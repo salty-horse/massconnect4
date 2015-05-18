@@ -3,10 +3,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 6,
+				"wins": 7,
 				"losses": 1,
 				"draws": 0,
-				"votes": 62
+				"votes": 65
 			}
 		],
 		"joined": "2015-04-29T13:46:26.397Z"
@@ -52,9 +52,9 @@
 		"stats": [
 			{
 				"wins": 3,
-				"losses": 8,
+				"losses": 9,
 				"draws": 0,
-				"votes": 75
+				"votes": 80
 			}
 		],
 		"joined": "2015-05-07T12:54:11.078Z"
@@ -63,10 +63,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 5,
+				"wins": 6,
 				"losses": 1,
 				"draws": 0,
-				"votes": 43
+				"votes": 55
 			}
 		],
 		"joined": "2015-05-07T13:07:52.982Z"
@@ -123,10 +123,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 1,
+				"wins": 2,
 				"losses": 0,
 				"draws": 0,
-				"votes": 1
+				"votes": 11
 			}
 		],
 		"joined": "2015-05-10T02:57:39.601Z"
@@ -220,9 +220,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 2,
+				"losses": 3,
 				"draws": 0,
-				"votes": 6
+				"votes": 11
 			}
 		],
 		"joined": "2015-05-10T22:18:13.938Z"
@@ -315,10 +315,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 0,
+				"wins": 1,
 				"losses": 1,
 				"draws": 0,
-				"votes": 1
+				"votes": 2
 			}
 		],
 		"joined": "2015-05-15T00:08:40.151Z"
@@ -328,9 +328,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 0,
+				"losses": 1,
 				"draws": 0,
-				"votes": 0
+				"votes": 2
 			}
 		],
 		"joined": "2015-05-15T16:19:25.778Z"
@@ -364,9 +364,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 4,
+				"losses": 5,
 				"draws": 0,
-				"votes": 23
+				"votes": 31
 			}
 		],
 		"joined": "2015-05-16T00:01:03.825Z"
@@ -460,24 +460,12 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 0,
+				"losses": 1,
 				"draws": 0,
-				"votes": 0
+				"votes": 4
 			}
 		],
 		"joined": "2015-05-18T01:10:41.439Z"
-	},
-	"akatookey": {
-		"team": "moon",
-		"stats": [
-			{
-				"wins": 0,
-				"losses": 0,
-				"draws": 0,
-				"votes": 0
-			}
-		],
-		"joined": "2015-05-18T01:10:41.460Z"
 	},
 	"lazerwalker": {
 		"team": "sun",
@@ -490,5 +478,17 @@
 			}
 		],
 		"joined": "2015-05-18T01:10:41.482Z"
+	},
+	"akatookey": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-18T17:18:49.418Z"
 	}
 }
