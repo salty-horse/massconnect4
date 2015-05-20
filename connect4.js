@@ -94,8 +94,8 @@ var interv = setInterval(function() {
 	if(Object.getOwnPropertyNames(tweeted_moves).length > 0) {
 		timeout = 0;
 		do_move();
-	} else timeout+=2;
-	if(timeout == 16) {
+	} else timeout+=3;
+	if(timeout == 15) {
 		T.post("statuses/update", {
 			status: "No votes received for 15 minutes\n\n" + draw_board() + "\nGame will end unless players join"}, function(err, data, response) { if(err) throw err; });
 	}
