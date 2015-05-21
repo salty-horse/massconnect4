@@ -3,10 +3,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 9,
-				"losses": 1,
+				"wins": 10,
+				"losses": 2,
 				"draws": 0,
-				"votes": 77
+				"votes": 83
 			}
 		],
 		"joined": "2015-04-29T13:46:26.397Z"
@@ -15,10 +15,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 7,
-				"losses": 3,
+				"wins": 8,
+				"losses": 4,
 				"draws": 0,
-				"votes": 47
+				"votes": 61
 			}
 		],
 		"joined": "2015-04-29T13:54:11.061Z"
@@ -51,10 +51,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 4,
-				"losses": 10,
+				"wins": 5,
+				"losses": 11,
 				"draws": 0,
-				"votes": 86
+				"votes": 98
 			}
 		],
 		"joined": "2015-05-07T12:54:11.078Z"
@@ -64,9 +64,9 @@
 		"stats": [
 			{
 				"wins": 7,
-				"losses": 1,
+				"losses": 2,
 				"draws": 0,
-				"votes": 57
+				"votes": 61
 			}
 		],
 		"joined": "2015-05-07T13:07:52.982Z"
@@ -75,10 +75,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 3,
+				"wins": 4,
 				"losses": 6,
 				"draws": 0,
-				"votes": 41
+				"votes": 51
 			}
 		],
 		"joined": "2015-05-07T13:12:13.850Z"
@@ -87,10 +87,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 3,
-				"losses": 2,
+				"wins": 4,
+				"losses": 3,
 				"draws": 0,
-				"votes": 8
+				"votes": 10
 			}
 		],
 		"joined": "2015-05-07T13:12:50.989Z"
@@ -112,9 +112,9 @@
 		"stats": [
 			{
 				"wins": 3,
-				"losses": 1,
+				"losses": 2,
 				"draws": 0,
-				"votes": 12
+				"votes": 13
 			}
 		],
 		"joined": "2015-05-07T13:14:39.622Z"
@@ -171,10 +171,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 5,
+				"wins": 6,
 				"losses": 0,
 				"draws": 0,
-				"votes": 19
+				"votes": 21
 			}
 		],
 		"joined": "2015-05-10T13:01:50.675Z"
@@ -219,10 +219,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 1,
+				"wins": 2,
 				"losses": 4,
 				"draws": 0,
-				"votes": 14
+				"votes": 16
 			}
 		],
 		"joined": "2015-05-10T22:18:13.938Z"
@@ -231,10 +231,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 4,
+				"wins": 5,
 				"losses": 0,
 				"draws": 0,
-				"votes": 8
+				"votes": 13
 			}
 		],
 		"joined": "2015-05-11T16:08:24.571Z"
@@ -363,10 +363,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 0,
-				"losses": 7,
+				"wins": 1,
+				"losses": 8,
 				"draws": 0,
-				"votes": 39
+				"votes": 59
 			}
 		],
 		"joined": "2015-05-16T00:01:03.825Z"
@@ -400,9 +400,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 0,
+				"losses": 1,
 				"draws": 0,
-				"votes": 0
+				"votes": 12
 			}
 		],
 		"joined": "2015-05-16T16:39:50.068Z"
@@ -411,10 +411,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 3,
-				"losses": 0,
+				"wins": 4,
+				"losses": 1,
 				"draws": 0,
-				"votes": 11
+				"votes": 21
 			}
 		],
 		"joined": "2015-05-16T17:37:03.953Z"
@@ -435,10 +435,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 0,
+				"wins": 1,
 				"losses": 2,
 				"draws": 0,
-				"votes": 8
+				"votes": 9
 			}
 		],
 		"joined": "2015-05-17T00:17:58.750Z"
@@ -448,9 +448,9 @@
 		"stats": [
 			{
 				"wins": 0,
-				"losses": 0,
+				"losses": 1,
 				"draws": 0,
-				"votes": 0
+				"votes": 5
 			}
 		],
 		"joined": "2015-05-18T01:10:41.411Z"
@@ -495,10 +495,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 0,
+				"wins": 1,
 				"losses": 0,
 				"draws": 0,
-				"votes": 0
+				"votes": 10
 			}
 		],
 		"joined": "2015-05-19T00:01:02.886Z"
@@ -507,10 +507,10 @@
 		"team": "sun",
 		"stats": [
 			{
-				"wins": 0,
+				"wins": 1,
 				"losses": 0,
 				"draws": 0,
-				"votes": 0
+				"votes": 3
 			}
 		],
 		"joined": "2015-05-19T00:01:02.912Z"
@@ -562,5 +562,29 @@
 			}
 		],
 		"joined": "2015-05-20T16:47:19.440Z"
+	},
+	"john_brindle": {
+		"team": "sun",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-21T00:01:03.107Z"
+	},
+	"NanamisEgg": {
+		"team": "moon",
+		"stats": [
+			{
+				"wins": 0,
+				"losses": 0,
+				"draws": 0,
+				"votes": 0
+			}
+		],
+		"joined": "2015-05-21T16:01:03.546Z"
 	}
 }

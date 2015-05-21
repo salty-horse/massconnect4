@@ -119,7 +119,7 @@ var interv = setInterval(function() {
 				stream.stop();
 		});
 	}
-},60*1000*2);
+},60*1000*3);
 
 //adds player to team and returns team name on success
 function try_add_player(tweet, team) {
