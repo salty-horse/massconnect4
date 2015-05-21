@@ -179,7 +179,10 @@ function draw_board(android) {
 
 	//out of loops, we now have a string of emoji for the board
 	//just gotta add the column numbers...
-	board_img += "\u0031\u20E3\u0032\u20E3\u0033\u20E3\u0034\u20E3\u0035\u20E3\u0036\u20E3\u0037\u20E3\n";
+//	if(android)
+//		board_img += "\uFF11\uFF12\uFF13\uFF14\uFF15\uFF16\uFF17\n";
+//	else
+		board_img += "\u0031\u20E3\u0032\u20E3\u0033\u20E3\u0034\u20E3\u0035\u20E3\u0036\u20E3\u0037\u20E3\n";
 	board_txt += "1234567\n";
 
 	//aaand tada, we're done!
