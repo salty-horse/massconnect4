@@ -71,9 +71,8 @@ T.post("statuses/update", {
 });
 
 stream.on("tweet", function(tweet) {
-	//exit immediately if not a mention
-	//the magic number 14 is to allow `.@`, the slice itself is a simple way to disallow RTs
-	if(tweet.text.slice(0,14).indexOf("@massconnect4") == -1) return;
+	//exit immediately if not a mention or if a RT
+	if(tweet.text.indexOf("@massconnect4") == -1 || tweet.text.indexOf("RT ") > -1) return;
 	
 	//if they're on the player list
 	if(players.hasOwnProperty(tweet.user.screen_name)) {
