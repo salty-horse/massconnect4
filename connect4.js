@@ -39,6 +39,8 @@ var participants = [];
 var season = stats.season;
 //increment on interval with no votes, clear on do_move, kill game after x minutes of no plays
 var timeout = 0;
+//ugh
+var tweet_to_post = {};
 
 //!\\ ATTN
 //I have to write another js file that checks the tweet backlog and adds players to teams
@@ -58,15 +60,16 @@ var timeout = 0;
 var stream = T.stream("user");
 
 console.log("game_type: " + game_type + "\nto_play: " + to_play);
-T.post("statuses/update", {
-	status: "Preseason Game "+(+stats.games+1)+"\nMode: " + game_type.capitalize() + "\n\n" + draw_board() + "\n" + to_play.capitalize() + " to Play"},
-	function(err, data, response) {
-		if(err) throw err;
-});
+tweet_to_post = { status: "Preseason Game "+(+stats.games+1)+"\nMode: " + game_type.capitalize() + "\n\n" + draw_board(true) + "\n" + to_play.capitalize() + " to Play"};
+T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
+tweet_to_post = { status: "Preseason Game "+(+stats.games+1)+"\nMode: " + game_type.capitalize() + "\n\n" + draw_board(false) + "\n" + to_play.capitalize() + " to Play"};
+T.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
 
 stream.on("tweet", function(tweet) {
 	//exit immediately if not a mention or if a RT
 	if(tweet.text.indexOf("@massconnect4") == -1 || tweet.text.indexOf("RT ") > -1) return;
+	//also if from the other bot
+	if(tweet.user.screen_name == "massconnect4" || tweet.user.screen_name == "massconnect5") return;
 	
 	//if they're on the player list
 	if(players.hasOwnProperty(tweet.user.screen_name)) {
@@ -89,12 +92,16 @@ var interv = setInterval(function() {
 		do_move();
 	} else timeout+=3;
 	if(timeout == 15) {
-		T.post("statuses/update", {
-			status: "No votes received for 15 minutes\n\n" + draw_board() + "\nGame will end unless players join"}, function(err, data, response) { if(err) throw err; });
+		tweet_to_post = { status: "No votes received for 15 minutes\n\n" + draw_board(true) + "\nGame will end unless players join" };
+		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
+		tweet_to_post = { status: "No votes received for 15 minutes\n\n" + draw_board(false) + "\nGame will end unless players join" };
+		T.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
 	}
 	if(timeout >= 20) {
-		T.post("statuses/update", {
-			status: "No votes received for "+timeout+" minutes\n\n" + draw_board() + "\nPreseason Game "+(+stats.games+1)+": Null Game"},
+		tweet_to_post = { status: "No votes received for "+timeout+" minutes\n\n" + draw_board(true) + "\nPreseason Game "+(+stats.games+1)+": Null Game" };
+		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
+		tweet_to_post = { status: "No votes received for "+timeout+" minutes\n\n" + draw_board(false) + "\nPreseason Game "+(+stats.games+1)+": Null Game" };
+		T.post("statuses/update", tweet_to_post,
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -139,9 +146,10 @@ function try_add_player(tweet, team) {
 }
 
 //returns a string of newlined emoji repping the board plus column nums	
-function draw_board() {
+function draw_board(android) {
 	var board_img = "";
 	var board_txt = "";
+	var blank = android ? "\uD83C\uDF46" : "\u2B1C";
 
 	//sub w forEach later
 	for(var j = 0; j < 6; j++) {
@@ -149,7 +157,7 @@ function draw_board() {
 			switch(board_array[i][j]) {
 				case 0:
 					//blank
-					board_img += "\u2B1C";
+					board_img += blank;
 					board_txt += "O";
 					break;
 				case "sun":
@@ -245,9 +253,10 @@ function do_move() {
 		}
 	}
 	if(check_win(final_move, final_j)) {
-		T.post("statuses/update", {
-			status: "Move "+current_move+": "+to_play.capitalize()+" Plays "+
-				(+final_move+1)+"\n\n"+draw_board()+"\nPreseason Game "+(+stats.games+1)+": "+to_play.capitalize()+" Wins!!"},
+		tweet_to_post = { status: "Move "+current_move+": "+to_play.capitalize()+" Plays "+ (+final_move+1)+"\n\n"+draw_board(true)+"\nPreseason Game "+(+stats.games+1)+": "+to_play.capitalize()+" Wins!!"};
+		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
+		tweet_to_post = { status: "Move "+current_move+": "+to_play.capitalize()+" Plays "+ (+final_move+1)+"\n\n"+draw_board(false)+"\nPreseason Game "+(+stats.games+1)+": "+to_play.capitalize()+" Wins!!"};
+		T.post("statuses/update", ,
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -271,9 +280,10 @@ function do_move() {
 				stream.stop();
 			});
 	} else if(check_draw()) {
-		T.post("statuses/update", {
-			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " +
-				(+final_move+1) + "\n\n" + draw_board() + "\nPreseason Game "+(+stats.games+1)+": Draw Game"},
+		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(true) + "\nPreseason Game "+(+stats.games+1)+": Draw Game"};
+		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
+		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(false) + "\nPreseason Game "+(+stats.games+1)+": Draw Game"};
+		T.post("statuses/update", ,
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -295,9 +305,10 @@ function do_move() {
 				stream.stop();
 			});
 	} else {
-		T.post("statuses/update", {
-			status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + 
-				(+final_move+1) + "\n\n" + draw_board() + "\n" + flip().capitalize() + "'s Turn" },
+		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(true) + "\n" + flip().capitalize() + "'s Turn" };
+		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
+		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(false) + "\n" + flip().capitalize() + "'s Turn" };
+		T.post("statuses/update", ,
 			function(err, data, response) {
 				if(err) throw err;
 				to_play = flip(); 
