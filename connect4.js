@@ -67,7 +67,7 @@ T.post("statuses/update", tweet_to_post, function(err, data, response) { if(err)
 
 stream.on("tweet", function(tweet) {
 	//exit immediately if not a mention or if a RT
-	if(tweet.text.indexOf("@massconnect4") == -1 || tweet.text.indexOf("RT ") > -1) return;
+	if(tweet.text.indexOf("@massconnect") == -1 || tweet.text.indexOf("RT ") > -1) return;
 	//also if from the other bot
 	if(tweet.user.screen_name == "massconnect4" || tweet.user.screen_name == "massconnect5") return;
 	
@@ -256,7 +256,7 @@ function do_move() {
 		tweet_to_post = { status: "Move "+current_move+": "+to_play.capitalize()+" Plays "+ (+final_move+1)+"\n\n"+draw_board(true)+"\nPreseason Game "+(+stats.games+1)+": "+to_play.capitalize()+" Wins!!"};
 		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
 		tweet_to_post = { status: "Move "+current_move+": "+to_play.capitalize()+" Plays "+ (+final_move+1)+"\n\n"+draw_board(false)+"\nPreseason Game "+(+stats.games+1)+": "+to_play.capitalize()+" Wins!!"};
-		T.post("statuses/update", ,
+		T.post("statuses/update", tweet_to_post,
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -283,7 +283,7 @@ function do_move() {
 		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(true) + "\nPreseason Game "+(+stats.games+1)+": Draw Game"};
 		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
 		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(false) + "\nPreseason Game "+(+stats.games+1)+": Draw Game"};
-		T.post("statuses/update", ,
+		T.post("statuses/update", tweet_to_post,
 			function(err, data, response) {
 				if(err) throw err;
 				//clear interval, update stats, etc
@@ -308,7 +308,7 @@ function do_move() {
 		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(true) + "\n" + flip().capitalize() + "'s Turn" };
 		T_A.post("statuses/update", tweet_to_post, function(err, data, response) { if(err) throw err; });
 		tweet_to_post = { status: "Move " + current_move + ": " + to_play.capitalize() + " Plays " + (+final_move+1) + "\n\n" + draw_board(false) + "\n" + flip().capitalize() + "'s Turn" };
-		T.post("statuses/update", ,
+		T.post("statuses/update", tweet_to_post,
 			function(err, data, response) {
 				if(err) throw err;
 				to_play = flip(); 
