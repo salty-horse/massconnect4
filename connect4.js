@@ -3,14 +3,8 @@ var Twit = require("twit");
 var wordfilter = require("wordfilter");
 var _ = require("underscore");
 
-var api = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
-
-var T = new Twit({
-	consumer_key: api.key,
-	consumer_secret: api.secret,
-	access_token: api.token,
-	access_token_secret: api.token_secret
-});
+var T = new Twit(require(__dirname + "/config.json"));
+var T_A = new Twit(require(__dirname + "/config_A.json"));
 
 var players = JSON.parse(fs.readFileSync(__dirname + "/players.json", "utf8"));
 var stats = JSON.parse(fs.readFileSync(__dirname + "/stats.json", "utf8"));
