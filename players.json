@@ -3,10 +3,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 10,
+				"wins": 11,
 				"losses": 2,
 				"draws": 0,
-				"votes": 83
+				"votes": 85
 			}
 		],
 		"joined": "2015-04-29T13:46:26.397Z"
@@ -52,9 +52,9 @@
 		"stats": [
 			{
 				"wins": 5,
-				"losses": 11,
+				"losses": 12,
 				"draws": 0,
-				"votes": 98
+				"votes": 104
 			}
 		],
 		"joined": "2015-05-07T12:54:11.078Z"
@@ -76,9 +76,9 @@
 		"stats": [
 			{
 				"wins": 4,
-				"losses": 6,
+				"losses": 7,
 				"draws": 0,
-				"votes": 51
+				"votes": 56
 			}
 		],
 		"joined": "2015-05-07T13:12:13.850Z"
@@ -195,10 +195,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 2,
+				"wins": 3,
 				"losses": 0,
 				"draws": 0,
-				"votes": 9
+				"votes": 11
 			}
 		],
 		"joined": "2015-05-10T13:05:25.944Z"
@@ -220,9 +220,9 @@
 		"stats": [
 			{
 				"wins": 2,
-				"losses": 4,
+				"losses": 5,
 				"draws": 0,
-				"votes": 16
+				"votes": 19
 			}
 		],
 		"joined": "2015-05-10T22:18:13.938Z"
@@ -231,10 +231,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 5,
+				"wins": 6,
 				"losses": 0,
 				"draws": 0,
-				"votes": 13
+				"votes": 14
 			}
 		],
 		"joined": "2015-05-11T16:08:24.571Z"
@@ -364,9 +364,9 @@
 		"stats": [
 			{
 				"wins": 1,
-				"losses": 8,
+				"losses": 9,
 				"draws": 0,
-				"votes": 59
+				"votes": 60
 			}
 		],
 		"joined": "2015-05-16T00:01:03.825Z"
@@ -411,10 +411,10 @@
 		"team": "moon",
 		"stats": [
 			{
-				"wins": 4,
+				"wins": 5,
 				"losses": 1,
 				"draws": 0,
-				"votes": 21
+				"votes": 31
 			}
 		],
 		"joined": "2015-05-16T17:37:03.953Z"
@@ -484,9 +484,9 @@
 		"stats": [
 			{
 				"wins": 1,
-				"losses": 1,
+				"losses": 2,
 				"draws": 0,
-				"votes": 13
+				"votes": 16
 			}
 		],
 		"joined": "2015-05-18T17:18:49.418Z"
