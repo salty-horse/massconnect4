@@ -1,21 +1,21 @@
 {
 	"season": 0,
-	"games": 22,
+	"games": 26,
 	"dead_games": 4,
 	"sun": [
 		{
-			"wins": 5,
-			"losses": 13,
+			"wins": 7,
+			"losses": 15,
 			"draws": 0,
-			"votes": 304
+			"votes": 380
 		}
 	],
 	"moon": [
 		{
-			"wins": 13,
-			"losses": 5,
+			"wins": 15,
+			"losses": 7,
 			"draws": 0,
-			"votes": 392
+			"votes": 465
 		}
 	]
 }
