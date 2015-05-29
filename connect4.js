@@ -344,7 +344,7 @@ function check_win(x, y) {
 	var n = x, m = y;
 	while(n > 0 && m > 0) { n--; m--; }
 
-	for(n, m; n < 7 && m < 6; n++, m++) {
+	for(; n < 7 && m < 6; n++, m++) {
 		if(board_array[n][m] == this_player) count++; else count = 0;
 		if(count == 4) return true;
 	}
@@ -354,7 +354,7 @@ function check_win(x, y) {
 	n = x, m = y;
 	while(n < 6 && m > 0) { n++; m--; }
 
-	for(n, m; n > 0 && m < 6; n--, m++) {
+	for(; n >= 0 && m < 6; n--, m++) {
 		if(board_array[n][m] == this_player) count++; else count = 0;
 		if(count == 4) return true;
 	}
